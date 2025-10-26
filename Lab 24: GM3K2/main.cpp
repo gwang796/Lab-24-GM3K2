@@ -14,7 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <list>
+#include <set>
 #include <ctime>
 #include <cstdlib>
 #include "Goat.h"
@@ -22,25 +22,22 @@ using namespace std;
 
 const int SZ_NAMES = 200, SZ_COLORS = 25, MAX_AGE = 20;
 
-//function select_goat has user input an integer
-//arguments: Goat list trip
-//return: int
-int select_goat(list<Goat> trip);
+//select_function no longer needed because set is based on uniqueness of data
 
 //function delete_goat deletes user selected goat object
-//arguments: Goat list trip
+//arguments: Goat set trip
 //return: none
-void delete_goat(list<Goat> &trip);
+void delete_goat(set<Goat> &trip);
 
 //function add_goat adds a goat with random values
-//arguments: Goat list trip, array of names, array of colors
+//arguments: Goat set trip, array of names, array of colors
 //return: none
-void add_goat(list<Goat> &trip, string [], string []);
+void add_goat(set<Goat> &trip, string [], string []);
 
 //function display_goat displays list
-//arguments: Goat list trip
+//arguments: Goat set trip
 //return: none
-void display_trip(list<Goat> trip);
+void display_trip(set<Goat> trip);
 
 //function main_menu has user choose action
 //arguments: none
@@ -61,7 +58,7 @@ int main() {
     i = 0;
     while (fin1 >> colors[i++]);
     fin1.close();
-    list<Goat> trip; //declare Goat list trip
+    set<Goat> trip; //declare Goat list trip
     int choice;
     while (again) { //loops until again = false
         choice = main_menu();
@@ -91,7 +88,7 @@ int main_menu() {
     }
     return user;
 }
-void add_goat(list<Goat> &trip, string names[], string colors[]){
+void add_goat(set<Goat> &trip, string names[], string colors[]){
     int randomName = rand() % SZ_NAMES;
     int randomColor = rand() % SZ_COLORS;
     int randomAge = rand() % MAX_AGE;
@@ -100,25 +97,29 @@ void add_goat(list<Goat> &trip, string names[], string colors[]){
     string color = colors[randomColor];
     
     Goat newGoat(name, randomAge, color);
-    trip.push_back(newGoat);
+    trip.insert(newGoat);
     display_trip(trip);
 }
 
-void delete_goat(list<Goat> &trip){
+void delete_goat(set<Goat> &trip){
     if (trip.empty()) {
         cout << "List is empty" << endl;
         return;
      }
-    int user = select_goat(trip); //call select_goat function
-    if (user == 1) { //if user selects head of list
-        trip.pop_front();
-    }
-    if (user == trip.size()) { //if user selects tail of list
-        trip.pop_back();
-    }
+    int a;
+    string n,c;
+    cout << "Enter name to delete: ";
+    cin >> n;
+    cin.ignore();
+    cout << "Enter age to delete: ";
+    cin >> a;
+    cin.ignore();
+    cout << "Enter color to delete: ";
+    cin >> c;
+    cin.ignore();
     int counter = 1;
     for (auto it = trip.begin(); it != trip.end(); ++it) { //iterates through whole list
-        if (counter == user) { //but only prints at selected delete goat
+        if (it->get_name()==n && it->get_age()==a && it->get_color()==c) { //but only prints at selected delete goat
             cout << "Deleting: " << "[" << counter << "] " <<  it->get_name() << " (" << it->get_age() << ", " << it->get_color() << ") " << endl;
             trip.erase(it);
             return;
@@ -129,7 +130,7 @@ void delete_goat(list<Goat> &trip){
     cout << "\nUpdated list: " << endl;
     display_trip(trip);
 }
-void display_trip(list<Goat> trip){
+void display_trip(set<Goat> trip){
     if (trip.empty()) {
         cout << "List is empty" << endl;
         cout << endl;
@@ -141,20 +142,4 @@ void display_trip(list<Goat> trip){
         cout << "[" << i++ << "] " << val.get_name() << " (" << val.get_age() << ", " << val.get_color() << ") " << endl;
     }
     cout << endl;
-}
-
-int select_goat(list<Goat> trip){
-    if (trip.empty()) {
-        cout << "List is empty" << endl;
-        return 1;
-     }
-    int user;
-    cout << "Select a Goat: ";
-    cin >> user;
-    cin.ignore();
-    if (user < 0 || user > trip.size()) {
-        cout << "Outside of List" << endl;
-        return 1;
-    }
-    return user;
 }
