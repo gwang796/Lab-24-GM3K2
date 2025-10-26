@@ -122,12 +122,9 @@ void delete_goat(set<Goat> &trip){
         if (it->get_name()==n && it->get_age()==a && it->get_color()==c) { //but only prints at selected delete goat
             cout << "Deleting: " << "[" << counter << "] " <<  it->get_name() << " (" << it->get_age() << ", " << it->get_color() << ") " << endl;
             trip.erase(it);
-            return;
         }
         counter++;
     }
-    
-    cout << "\nUpdated list: " << endl;
     display_trip(trip);
 }
 void display_trip(set<Goat> trip){
