@@ -44,6 +44,7 @@ public:
         //last case is checking color
         if (color < other.color) return true;
         if (color > other.color) return true;
+        //if nothing returns then two objects are equal
         return false;
     }
 };

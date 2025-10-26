@@ -121,11 +121,15 @@ void delete_goat(set<Goat> &trip){
     for (auto it = trip.begin(); it != trip.end(); ++it) { //iterates through whole list
         if (it->get_name()==n && it->get_age()==a && it->get_color()==c) { //but only prints at selected delete goat
             cout << "Deleting: " << "[" << counter << "] " <<  it->get_name() << " (" << it->get_age() << ", " << it->get_color() << ") " << endl;
-            trip.erase(it);
+            //use it++ because it deletes it the moves to next node
+            //if erase.(it) that completely deletes it, so doing ++it after is invalid because its indefined
+            trip.erase(it++);
+            display_trip(trip);
+            return;
         }
-        counter++;
     }
-    display_trip(trip);
+    cout << "\nGoat was not found" << endl;
+    cout << endl;
 }
 void display_trip(set<Goat> trip){
     if (trip.empty()) {
